@@ -30,7 +30,7 @@ namespace TradeMeUp.Logging
 			RollingFileAppender roller = new RollingFileAppender();
 			roller.AppendToFile = false;
 			roller.File = @"logs\trademeup.log";
-			roller.DatePattern = "yyyy-MM-=dd";
+			roller.DatePattern = "yyyy-MM-dd";
 			roller.Layout = patternLayout;
 			roller.PreserveLogFileNameExtension = true;
 			roller.MaxSizeRollBackups = 5;
