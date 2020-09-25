@@ -1,0 +1,19 @@
+# Initial Design Thoughts
+- Alpaca API
+- Console Application
+- Shared Library
+- Logging
+  - File
+  - Console
+- Scheduler
+- Configuration
+  - live mode
+  - live and paper keys
+  - strategies
+  - extended hours
+- Indicators
+  - Simple Moving Average (SMA)
+  - Rate of Change Percentage (ROCP)
+- Connection Handler
+- Request Queueing System
+- Reusable Strategy Implementation
