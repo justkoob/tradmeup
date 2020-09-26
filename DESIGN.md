@@ -2,18 +2,20 @@
 - Alpaca API
 - Console Application
 - Shared Library
-- Logging
-  - File
-  - Console
+- Logging x
+  - File x
+  - Console x
 - Scheduler
-- Configuration
-  - live mode
-  - live and paper keys
-  - strategies
-  - extended hours
+  - Connection Handler
+  - Indicator Data Subscription Updates
+- Configuration x
+  - live mode x
+  - live and paper keys x
+  - strategies x
+  - extended hours x
 - Indicators
   - Simple Moving Average (SMA)
   - Rate of Change Percentage (ROCP)
-- Connection Handler
+- Connection Handler - In Scheduler?
 - Request Queueing System
 - Reusable Strategy Implementation

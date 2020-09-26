@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeMeUp.RunTime", "TradeM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeMeUp.Logging", "TradeMeUp.Logging\TradeMeUp.Logging.csproj", "{1642D277-45E0-4557-940A-FA11DB234CD6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradeMeUp.Configuration", "TradeMeUp.Configuration\TradeMeUp.Configuration.csproj", "{3A474DE5-AD65-4CB3-831D-EC63F623FF7E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{1642D277-45E0-4557-940A-FA11DB234CD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1642D277-45E0-4557-940A-FA11DB234CD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1642D277-45E0-4557-940A-FA11DB234CD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A474DE5-AD65-4CB3-831D-EC63F623FF7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A474DE5-AD65-4CB3-831D-EC63F623FF7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A474DE5-AD65-4CB3-831D-EC63F623FF7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A474DE5-AD65-4CB3-831D-EC63F623FF7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
