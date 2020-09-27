@@ -11,6 +11,8 @@ namespace TradeMeUp.RunTime
 		
 		private static async Task StartScheduler()
 		{
+			Logger.LogDebug("StartScheduler");
+
 			Scheduler = await new StdSchedulerFactory().GetScheduler();
 			await Scheduler.Start();
 			await Scheduler.ScheduleJob(GetJob(typeof(ConnectionManagerJob)), GetTrigger(EVERY_MINUTE_FORVER));

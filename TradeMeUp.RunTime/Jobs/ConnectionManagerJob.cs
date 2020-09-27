@@ -12,8 +12,12 @@ namespace TradeMeUp.RunTime
 	{
 		public async Task Execute(IJobExecutionContext context)
 		{
+			RunManager.Logger.LogDebug("ConnectionManagerJob");
+
 			RunManager.Clock = await RunManager.AlpacaTradingClient.GetClockAsync();
 
+			RunManager.Logger.LogDebug($"Market IsOpen: {RunManager.Clock.IsOpen}");
+			
 			if (RunManager.Clock.IsOpen)
 			{
 				// Market should be open.  We need to ensure we are connected and subscribed.
