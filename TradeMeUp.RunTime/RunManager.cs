@@ -1,75 +1,71 @@
 ﻿using Alpaca.Markets;
+using Quartz;
+using Quartz.Impl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TradeMeUp.Configuration;
+using TradeMeUp.Logging;
 
 namespace TradeMeUp.RunTime
 {
-	public static class RunManager
+	public static partial class RunManager
 	{
 		private static AppSettings appSettings;
 
-		private static IAlpacaTradingClient alpacaTradingClient;
-		private static IAlpacaStreamingClient alpacaStreamingClient;
-		private static IPolygonDataClient polygonDataClient;
-		private static IPolygonStreamingClient polygonStreamingClient;
+		internal static readonly LogFactory Logger;
+		internal static IScheduler Scheduler { get; set; }
+		internal static IAlpacaTradingClient AlpacaTradingClient { get; set; }
+		internal static IAlpacaStreamingClient AlpacaStreamingClient { get; set; }
+		internal static IPolygonDataClient PolygonDataClient { get; set; }
+		internal static IPolygonStreamingClient PolygonStreamingClient { get; set; }
+
+		// TODO: Should be potentially thread safe object.  Implement an object lock for these???
+		internal static bool AlpacaStreamingClient_IsConnected { get; set; }
+		internal static bool PolygonStreamingClient_IsConnected { get; set; }
+		internal static bool PolygonStreamingClient_Subscribed { get; set; }
+		internal static IClock Clock { get; set; }
 
 		public static bool Live => appSettings.live;
 		public static bool Extended => appSettings.extendedTrading;
 
 		static RunManager()
 		{
+			Logger = new LogFactory()
+#if DEBUG
+				.MinimumDebug()
+#else
+				.MinimumInformation()
+#endif
+				.AddConsole()
+				.AddFile();
+
 			appSettings = ConfigManager.Load();
 
 			// Alpaca client initialize
-			alpacaTradingClient = appSettings.Environment.GetAlpacaTradingClient(appSettings.SecretKey);
+			AlpacaTradingClient = appSettings.Environment.GetAlpacaTradingClient(appSettings.SecretKey);
 
-			alpacaStreamingClient = appSettings.Environment.GetAlpacaStreamingClient(appSettings.SecretKey);
-			alpacaStreamingClient.OnAccountUpdate += AlpacaStreamingClient_OnAccountUpdate;
-			alpacaStreamingClient.OnTradeUpdate += AlpacaStreamingClient_OnTradeUpdate;
-			alpacaStreamingClient.SocketOpened += AlpacaStreamingClient_SocketOpened;
-			alpacaStreamingClient.SocketClosed += AlpacaStreamingClient_SocketClosed;
-			alpacaStreamingClient.Connected += AlpacaStreamingClient_Connected;
+			AlpacaStreamingClient = appSettings.Environment.GetAlpacaStreamingClient(appSettings.SecretKey);
+			AlpacaStreamingClient.SocketOpened += AlpacaStreamingClient_SocketOpened;
+			AlpacaStreamingClient.Connected += AlpacaStreamingClient_Connected;
+			AlpacaStreamingClient.SocketClosed += AlpacaStreamingClient_SocketClosed;
+			AlpacaStreamingClient.OnError += AlpacaStreamingClient_OnError;
+			AlpacaStreamingClient.OnAccountUpdate += AlpacaStreamingClient_OnAccountUpdate;
+			AlpacaStreamingClient.OnTradeUpdate += AlpacaStreamingClient_OnTradeUpdate;
 
 			// Polygon client initialize
-			polygonDataClient = appSettings.Environment.GetPolygonDataClient(appSettings.Id);
-
-			polygonStreamingClient = appSettings.Environment.GetPolygonStreamingClient(appSettings.Id);
-			polygonStreamingClient.Connected += PolygonStreamingClient_Connected;
-			polygonStreamingClient.SocketOpened += PolygonStreamingClient_SocketOpened;
-			polygonStreamingClient.SocketClosed += PolygonStreamingClient_SocketClosed;
-			polygonStreamingClient.MinuteAggReceived += PolygonStreamingClient_MinuteAggReceived;
+			PolygonDataClient = appSettings.Environment.GetPolygonDataClient(appSettings.Id);
+			PolygonStreamingClient = appSettings.Environment.GetPolygonStreamingClient(appSettings.Id);
+			PolygonStreamingClient.SocketOpened += PolygonStreamingClient_SocketOpened;
+			PolygonStreamingClient.Connected += PolygonStreamingClient_Connected;
+			PolygonStreamingClient.SocketClosed += PolygonStreamingClient_SocketClosed;
+			PolygonStreamingClient.OnError += PolygonStreamingClient_OnError;
+			PolygonStreamingClient.MinuteAggReceived += PolygonStreamingClient_MinuteAggReceived;
 		}
 
 		private static void PolygonStreamingClient_MinuteAggReceived(IStreamAgg obj)
-		{
-			throw new NotImplementedException();
-		}
-
-		private static void PolygonStreamingClient_SocketClosed()
-		{
-			throw new NotImplementedException();
-		}
-
-		private static void PolygonStreamingClient_SocketOpened()
-		{
-			throw new NotImplementedException();
-		}
-
-		private static void PolygonStreamingClient_Connected(AuthStatus obj)
-		{
-			throw new NotImplementedException();
-		}
-
-		private static void AlpacaStreamingClient_SocketClosed()
-		{
-			throw new NotImplementedException();
-		}
-
-		private static void AlpacaStreamingClient_SocketOpened()
 		{
 			throw new NotImplementedException();
 		}
@@ -84,14 +80,18 @@ namespace TradeMeUp.RunTime
 			throw new NotImplementedException();
 		}
 
-		private static void AlpacaStreamingClient_Connected(AuthStatus obj)
-		{
-			throw new NotImplementedException();
-		}
-
 		public static async void StartAsync()
 		{
+			Logger.LogDebug("Starting RunManager");
 
+			await Initialize();
+		}
+
+		private static async Task Initialize()
+		{
+			Logger.LogDebug("Initializing");
+
+			await StartScheduler();
 		}
 	}
 }
