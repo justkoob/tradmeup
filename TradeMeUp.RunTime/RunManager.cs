@@ -8,12 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using TradeMeUp.Configuration;
 using TradeMeUp.Logging;
+using TradeMeUp.RunTime.Strategies;
 
 namespace TradeMeUp.RunTime
 {
 	public static partial class RunManager
 	{
 		private static AppSettings appSettings;
+		private static readonly List<IStrategy> strategies = new List<IStrategy>();
 
 		internal static readonly LogFactory Logger;
 		internal static IScheduler Scheduler { get; set; }
@@ -85,13 +87,32 @@ namespace TradeMeUp.RunTime
 			Logger.LogDebug("Starting RunManager");
 
 			await Initialize();
+
+			while (Scheduler.IsShutdown)
+			{
+				await Task.Delay(1000);
+			}
 		}
 
 		private static async Task Initialize()
 		{
 			Logger.LogDebug("Initializing");
-
+			
+			await LoadStrategies();
 			await StartScheduler();
+
+			Logger.LogInformation("Initialize complete.");
+		}
+
+		public static async Task StopAsync()
+		{
+			// TODO: Should we liquidate on stop?
+			await Disconnect();
+			AlpacaTradingClient?.Dispose();
+			AlpacaStreamingClient?.Dispose();
+			PolygonDataClient?.Dispose();
+			PolygonStreamingClient?.Dispose();
+			await Scheduler?.Shutdown();
 		}
 	}
 }
