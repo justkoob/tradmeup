@@ -1,4 +1,4 @@
-﻿using System.Runtime.InteropServices.ComTypes;
+﻿using Alpaca.Markets;
 using System.Threading.Tasks;
 
 namespace TradeMeUp.RunTime.Strategies
@@ -14,7 +14,7 @@ namespace TradeMeUp.RunTime.Strategies
 			return Task.CompletedTask;
 		}
 
-		public override void OnData(IStream obj)
+		public override void OnDataReceived(IStreamAgg obj)
 		{
 			// Implement the strategy
 		}

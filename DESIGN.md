@@ -22,3 +22,26 @@
 - Scheduler
   - Indicator Data Subscription Updates
 - Request Queueing System
+
+# 09/29/2020 - Streaming data subscription thoughts
+- Implement a dictionary <string, Security> x
+- Security type would have the following: x
+  - Symbol x
+  - IStreamAggDelegate OnMinuteAggReceived x
+  - IStreamAggDelegate OnSecondAggReceived
+  - LastOrder
+  - LastFilledOrder
+  - Invested
+  - TransactionDate
+  - OrderHistroy
+
+# 09/29/2020 - Remaining tasks
+- Reusable Strategy Implementation - partially done
+  - Potentially still need state data for tracking indicators specific to strategies
+- Implement AlpacaStreamingClient_OnTradeUpdate
+- Indicators
+  - Simple Moving Average (SMA)
+  - Rate of Change Percentage (ROCP)
+- Scheduler
+  - Indicator Data Subscription Updates
+- Request Queueing System

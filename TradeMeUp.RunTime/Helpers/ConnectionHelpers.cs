@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using TradeMeUp.RunTime.Models;
 
 namespace TradeMeUp.RunTime
 {
@@ -21,18 +24,7 @@ namespace TradeMeUp.RunTime
 				// PolygonStreamingClient connect
 				await PolygonStreamingClient.ConnectAsync();
 
-				// PolygonStreamingClient minute agg subscribe
-				if (PolygonStreamingClient_Subscribed)
-				{
-					Logger.LogDebug("PolygonStreamingClient minute agg unsubscribe");
-
-					PolygonStreamingClient.UnsubscribeMinuteAgg("TSLA");
-				}
-
-				Logger.LogDebug("PolygonStreamingClient minute agg subscribe");
-
-				PolygonStreamingClient.SubscribeMinuteAgg("TSLA");
-				PolygonStreamingClient_Subscribed = true;
+				Subscribe();
 			}
 		}
 
@@ -53,15 +45,28 @@ namespace TradeMeUp.RunTime
 				// PolygonStreamingClient disconnect
 				await PolygonStreamingClient.DisconnectAsync();
 
-				// PolygonStreamingClient minute agg unsubscribe
-				if (PolygonStreamingClient_Subscribed)
-				{
-					Logger.LogDebug("PolygonStreamingClient minute agg unsubscribe");
+				Unsubscribe();
+			}
+		}
 
-					PolygonStreamingClient.UnsubscribeMinuteAgg("TSLA");
-					PolygonStreamingClient_Subscribed = false;
+		private static void Subscribe()
+		{
+			Unsubscribe();
 
-				}
+			Logger.LogDebug("PolygonStreamingClient minute agg subscribe");
+
+			PolygonStreamingClient.SubscribeMinuteAgg(Securities.Keys);
+			PolygonStreamingClient_Subscribed = true;
+		}
+
+		private static void Unsubscribe()
+		{
+			// PolygonStreamingClient minute agg subscribe
+			if (PolygonStreamingClient_Subscribed)
+			{
+				Logger.LogDebug("PolygonStreamingClient minute agg unsubscribe");
+
+				PolygonStreamingClient.UnsubscribeMinuteAgg(Securities.Keys);
 			}
 		}
 	}

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
+﻿using Alpaca.Markets;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace TradeMeUp.RunTime.Strategies
@@ -10,7 +10,7 @@ namespace TradeMeUp.RunTime.Strategies
 
 		public abstract Task Initialize();
 
-		public abstract void OnData(IStream obj);
+		public abstract void OnDataReceived(IStreamAgg obj);
 
 		public BaseStrategy()
 		{

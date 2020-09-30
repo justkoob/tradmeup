@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using TradeMeUp.RunTime.Models;
 using TradeMeUp.RunTime.Strategies;
 
 namespace TradeMeUp.RunTime
@@ -23,29 +24,35 @@ namespace TradeMeUp.RunTime
 				if (iStrategyNames.Contains(strategyName))
 				{
 					var strategyType = iStrategyTypes.Where(t => t.Name == strategyName).First();
-					var instance = Activator.CreateInstance(strategyType) as IStrategy;
+					var strategy = Activator.CreateInstance(strategyType) as IStrategy;
 
 					var task = Task.Run(async () =>
 					{
 						Logger.LogDebug($"Initializing: {strategyName}");
-						await instance.Initialize();
+						await strategy.Initialize();
 					});
 
 					initializeTasks.Add(task);
-					strategies.Add(instance);
+					
+					foreach (var symbol in strategy.Subscriptions)
+					{
+						var security = Securities.GetOrAdd(symbol, new Security(symbol));
+						security.OnMinuteAggReceived += strategy.OnDataReceived;
+					}
 				}
 			}
 
-			if (strategies.Count > 0)
+			if (Securities.Count > 0)
 			{
 				Task.WaitAll(initializeTasks.ToArray());
-				var jsonNames = JsonConvert.SerializeObject(strategies.Select(s => s.GetType().Name));
+				// TODO: No longer outputing the correct information, fix
+				var jsonNames = JsonConvert.SerializeObject(Securities.Select(s => s.Value.GetType().Name));
 				Logger.LogInformation($"Initialized strategies: {jsonNames}");
 			}
 			else
 			{
 				Logger.LogError("No strategies found.");
-				StopAsync().Wait();
+				await StopAsync();
 			}
 		}
 

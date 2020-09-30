@@ -1,22 +1,20 @@
 ﻿using Alpaca.Markets;
 using Quartz;
-using Quartz.Impl;
-using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TradeMeUp.Configuration;
 using TradeMeUp.Logging;
+using TradeMeUp.RunTime.Models;
 using TradeMeUp.RunTime.Strategies;
 
 namespace TradeMeUp.RunTime
 {
 	public static partial class RunManager
 	{
-		private static AppSettings appSettings;
-		private static readonly List<IStrategy> strategies = new List<IStrategy>();
-
+		private static readonly AppSettings appSettings;
+		
+		internal static readonly ConcurrentDictionary<string, Security> Securities = new ConcurrentDictionary<string, Security>();
 		internal static readonly LogFactory Logger;
 		internal static IScheduler Scheduler { get; set; }
 		internal static IAlpacaTradingClient AlpacaTradingClient { get; set; }
@@ -65,21 +63,6 @@ namespace TradeMeUp.RunTime
 			PolygonStreamingClient.SocketClosed += PolygonStreamingClient_SocketClosed;
 			PolygonStreamingClient.OnError += PolygonStreamingClient_OnError;
 			PolygonStreamingClient.MinuteAggReceived += PolygonStreamingClient_MinuteAggReceived;
-		}
-
-		private static void PolygonStreamingClient_MinuteAggReceived(IStreamAgg obj)
-		{
-			throw new NotImplementedException();
-		}
-
-		private static void AlpacaStreamingClient_OnTradeUpdate(ITradeUpdate obj)
-		{
-			throw new NotImplementedException();
-		}
-
-		private static void AlpacaStreamingClient_OnAccountUpdate(IAccountUpdate obj)
-		{
-			throw new NotImplementedException();
 		}
 
 		public static async void StartAsync()
