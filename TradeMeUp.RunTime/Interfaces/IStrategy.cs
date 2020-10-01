@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 
-namespace TradeMeUp.RunTime.Strategies
+namespace TradeMeUp.RunTime.Interfaces
 {
 	public interface IStrategy
 	{

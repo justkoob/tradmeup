@@ -7,13 +7,14 @@ using TradeMeUp.Configuration;
 using TradeMeUp.Logging;
 using TradeMeUp.RunTime.Models;
 using TradeMeUp.RunTime.Strategies;
+using ICalendar = Alpaca.Markets.ICalendar;
 
 namespace TradeMeUp.RunTime
 {
 	public static partial class RunManager
 	{
 		private static readonly AppSettings appSettings;
-		
+
 		internal static readonly ConcurrentDictionary<string, Security> Securities = new ConcurrentDictionary<string, Security>();
 		internal static readonly LogFactory Logger;
 		internal static IScheduler Scheduler { get; set; }
@@ -27,6 +28,7 @@ namespace TradeMeUp.RunTime
 		internal static bool PolygonStreamingClient_IsConnected { get; set; }
 		internal static bool PolygonStreamingClient_Subscribed { get; set; }
 		internal static IClock Clock { get; set; }
+		internal static IReadOnlyList<ICalendar> TradingCalendars { get; set; }
 
 		public static bool Live => appSettings.live;
 		public static bool Extended => appSettings.extendedTrading;

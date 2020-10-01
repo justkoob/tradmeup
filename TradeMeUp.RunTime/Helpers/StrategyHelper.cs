@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using TradeMeUp.RunTime.Interfaces;
 using TradeMeUp.RunTime.Models;
-using TradeMeUp.RunTime.Strategies;
 
 namespace TradeMeUp.RunTime
 {

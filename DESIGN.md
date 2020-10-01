@@ -45,3 +45,15 @@
 - Scheduler
   - Indicator Data Subscription Updates
 - Request Queueing System
+
+# 09/30/2020 - Remaining tasks
+- Reusable Strategy Implementation - partially done
+  - Potentially still need state data for tracking indicators specific to strategies
+- Add a project for unit tests (specificaly SubtractTradingDays())
+- Implement AlpacaStreamingClient_OnTradeUpdate
+- Indicators
+  - Simple Moving Average (SMA)
+  - Rate of Change Percentage (ROCP)
+- Scheduler
+  - Indicator Data Subscription Updates
+- Request Queueing System
